@@ -1,0 +1,2 @@
+import assert from "node:assert/strict";import {selectLifecycleMail} from "./lifecycle_templates";
+assert.equal(selectLifecycleMail({matterId:"intake-1042",recipient:"a@example.com",clientName:"A"}),"intake");assert.equal(selectLifecycleMail({matterId:"signed-1042",recipient:"a@example.com",clientName:"A"}),"signed_delivery");assert.equal(selectLifecycleMail({matterId:"intake-1042",recipient:"a@example.com",clientName:"A",deadline:"2026-09-01"}),"deadline_follow_up");console.log("lifecycle decision test passed");
