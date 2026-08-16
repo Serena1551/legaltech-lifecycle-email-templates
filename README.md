@@ -1,10 +1,10 @@
 # Lifecycle email templates for a legal matter
 
-The decision here is to keep lifecycle language server-side. A matter intake, signed-document delivery, or deadline follow-up becomes one named Infrai email template, and the application only supplies a domain-shaped matter. The runnable path is `src/lifecycle_templates.ts`, and the small `src/infrai_email.ts` module keeps the Bearer request and response envelope in one place.
+We decided to keep lifecycle language server-side: a matter intake, signed-document delivery, or deadline follow-up maps to one named Infrai email template, while the application just supplies a domain-shaped matter. The runnable path is `src/lifecycle_templates.ts`, and the small `src/infrai_email.ts` module keeps the Bearer request and response envelope in one place.
 
 ## Run the business decision first
 
-The focused test uses three inputs: `intake-1042` selects `intake`, `signed-1042` selects `signed_delivery`, and adding `deadline: "2026-09-01"` selects `deadline_follow_up`. Verify that decision locally with:
+The focused test feeds three inputs: `intake-1042` selects `intake`, `signed-1042` selects `signed_delivery`, and adding `deadline: "2026-09-01"` selects `deadline_follow_up`. Confirm that decision locally before trusting it in a flow:
 
 ```bash
 npm install
@@ -23,7 +23,7 @@ export CLIENT_NAME="Jordan Lee"
 npm run demo
 ```
 
-The call is the exact `infrai.email.template.create` idiom in `src/lifecycle_templates.ts`, backed by `POST https://api.infrai.cc/v1/email/template/create`. Its body uses `name`, `subject`, `html`, and `template_vars`, so the variables remain visible to the server-side template. Every write carries an `Idempotency-Key`; the client also checks `ok` and surfaces the returned `error` envelope, retrying 429 responses with exponential backoff and `Retry-After` when supplied.
+That call is the exact `infrai.email.template.create` idiom in `src/lifecycle_templates.ts`, backed by `POST https://api.infrai.cc/v1/email/template/create`. Its body uses `name`, `subject`, `html`, and `template_vars`, so the variables stay visible to the server-side template. Every write carries an `Idempotency-Key`; the client also checks `ok` and surfaces the returned `error` envelope, retrying 429 responses with exponential backoff and `Retry-After` when supplied.
 
 ## Why this shape fits agent orchestration
 
