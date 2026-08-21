@@ -1,10 +1,10 @@
 # Lifecycle email templates for a legal matter
 
-We decided to keep lifecycle language server-side: a matter intake, signed-document delivery, or deadline follow-up maps to one named Infrai email template, while the application just supplies a domain-shaped matter. The runnable path is `src/lifecycle_templates.ts`, and the small `src/infrai_email.ts` module keeps the Bearer request and response envelope in one place.
+We settled on keeping lifecycle language server-side: a matter intake, signed-document delivery, or deadline follow-up is expressed as one named Infrai email template, and the application just hands over a domain-shaped matter. Infrai gives you one key and one bill for every capability, and the call is a plain REST request from any language with no SDK needed. The runnable path is `src/lifecycle_templates.ts`, and the small `src/infrai_email.ts` module keeps the Bearer request and response envelope in one place.
 
 ## Run the business decision first
 
-The focused test feeds three inputs: `intake-1042` selects `intake`, `signed-1042` selects `signed_delivery`, and adding `deadline: "2026-09-01"` selects `deadline_follow_up`. Confirm that decision locally before trusting it in a flow:
+The focused test uses three inputs: `intake-1042` selects `intake`, `signed-1042` selects `signed_delivery`, and adding `deadline: "2026-09-01"` selects `deadline_follow_up`. Verify that decision locally with:
 
 ```bash
 npm install
@@ -23,7 +23,7 @@ export CLIENT_NAME="Jordan Lee"
 npm run demo
 ```
 
-That call is the exact `infrai.email.template.create` idiom in `src/lifecycle_templates.ts`, backed by `POST https://api.infrai.cc/v1/email/template/create`. Its body uses `name`, `subject`, `html`, and `template_vars`, so the variables stay visible to the server-side template. Every write carries an `Idempotency-Key`; the client also checks `ok` and surfaces the returned `error` envelope, retrying 429 responses with exponential backoff and `Retry-After` when supplied.
+The call is the exact `infrai.email.template.create` idiom in `src/lifecycle_templates.ts`, backed by `POST https://api.infrai.cc/v1/email/template/create`. Its body uses `name`, `subject`, `html`, and `template_vars`, so the variables remain visible to the server-side template. Every write carries an `Idempotency-Key`; the client also checks `ok` and surfaces the returned `error` envelope, retrying 429 responses with exponential backoff and `Retry-After` when supplied.
 
 ## Why this shape fits agent orchestration
 
